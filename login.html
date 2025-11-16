@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تسجيل الدخول</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+<script>
+
+  // ⚠️ ضع config الخاص فيك هنا بدل الأسطر التالية
+  const firebaseConfig = {
+   // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAMLYntaSK5ePYqPmJkWuzTfPEtSkni98U",
+  authDomain: "invoice-system-43254.firebaseapp.com",
+  projectId: "invoice-system-43254",
+  storageBucket: "invoice-system-43254.firebasestorage.app",
+  messagingSenderId: "609897912988",
+  appId: "1:609897912988:web:ccc3476b4f2200a7446b59",
+  measurementId: "G-VM2MK4D1LT"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+</script>
+
+<style>
+  body { font-family: Arial; background:#f1f1f1; padding:40px; text-align:center; }
+  input { padding:10px; margin:10px; width:250px; border-radius:6px; border:1px solid #aaa; }
+  button { padding:10px 20px; background:#28a745; border:none; color:#fff; border-radius:6px; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<h2>🔐 تسجيل الدخول إلى نظام الفواتير</h2>
+
+<input type="email" id="email" placeholder="الإيميل"><br>
+<input type="password" id="password" placeholder="كلمة المرور"><br>
+
+<button onclick="login()">دخول</button>
+<button onclick="signup()">إنشاء حساب</button>
+<p id="msg" style="color:red;"></p>
+
+<script>
+function login() {
+  const email = document.getElementById("email").value;
+  const pass  = document.getElementById("password").value;
+
+  auth.signInWithEmailAndPassword(email, pass)
+    .then(() => window.location.href = "index.html")
+    .catch(err => document.getElementById("msg").innerHTML = err.message);
+}
+
+function signup() {
+  const email = document.getElementById("email").value;
+  const pass  = document.getElementById("password").value;
+
+  auth.createUserWithEmailAndPassword(email, pass)
+    .then(() => alert("تم إنشاء الحساب"))
+    .catch(err => document.getElementById("msg").innerHTML = err.message);
+}
+</script>
+
+</body>
+</html>
