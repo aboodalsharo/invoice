@@ -11,13 +11,27 @@
   <script>
     // 🔥 هذا هو الـ config الخاص بمشروعك (من الصورة اللي أرسلتها)
     var firebaseConfig = {
-      apiKey: "AIzaSyAMLyntaSK5ePyQpmJkWuzTfPEtSkni98U",
-      authDomain: "invoice-system-43254.firebaseapp.com",
-      projectId: "invoice-system-43254",
-      storageBucket: "invoice-system-43254.appspot.com",
-      messagingSenderId: "608997912988",
-      appId: "1:608997912988:web:ccc3476b4f220a7446b59",
-      measurementId: "G-VM2MK4DL1T"
+     // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAMLYntaSK5ePYqPmJkWuzTfPEtSkni98U",
+  authDomain: "invoice-system-43254.firebaseapp.com",
+  projectId: "invoice-system-43254",
+  storageBucket: "invoice-system-43254.firebasestorage.app",
+  messagingSenderId: "609897912988",
+  appId: "1:609897912988:web:ccc3476b4f2200a7446b59",
+  measurementId: "G-VM2MK4D1LT"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
     };
 
     // تهيئة Firebase
@@ -102,3 +116,4 @@
 
 </body>
 </html>
+
