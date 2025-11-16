@@ -4,34 +4,21 @@
   <meta charset="UTF-8" />
   <title>تسجيل الدخول - نظام الفواتير</title>
 
-  <!-- Firebase v8 (أسهل للاستخدام في صفحة HTML عادية) -->
+  <!-- Firebase v8 (أسهل لملف HTML عادي) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
   <script>
-    // 🔥 هذا هو الـ config الخاص بمشروعك (من الصورة اللي أرسلتها)
+    // ⬅⬅⬅  هون بالضبط رح نحط firebaseConfig الصحيح
+
     var firebaseConfig = {
-     // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAMLYntaSK5ePYqPmJkWuzTfPEtSkni98U",
-  authDomain: "invoice-system-43254.firebaseapp.com",
-  projectId: "invoice-system-43254",
-  storageBucket: "invoice-system-43254.firebasestorage.app",
-  messagingSenderId: "609897912988",
-  appId: "1:609897912988:web:ccc3476b4f2200a7446b59",
-  measurementId: "G-VM2MK4D1LT"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+      apiKey: "API_KEY_HERE",
+      authDomain: "AUTH_DOMAIN_HERE",
+      projectId: "PROJECT_ID_HERE",
+      storageBucket: "STORAGE_BUCKET_HERE",
+      messagingSenderId: "SENDER_ID_HERE",
+      appId: "APP_ID_HERE",
+      // measurementId optional
     };
 
     // تهيئة Firebase
@@ -116,4 +103,3 @@ const analytics = getAnalytics(app);
 
 </body>
 </html>
-
