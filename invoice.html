@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام الفواتير الرسمي</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f9f9f9;
+        padding: 20px;
+        direction: rtl;
+    }
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+    .form-group {
+        margin-bottom: 10px;
+    }
+    label {
+        font-weight: bold;
+    }
+    input, textarea {
+        padding: 8px;
+        width: 100%;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+    button {
+        padding: 10px 15px;
+        margin-top: 10px;
+        cursor: pointer;
+        border: none;
+        background-color: #2a7;
+        color: white;
+        border-radius: 5px;
+    }
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #eee;
+    }
+    #searchBar {
+        padding: 8px;
+        width: 100%;
+        margin-bottom: 10px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body>
+
+<h2>📋 نظام إدارة الفواتير</h2>
+
+<div>
+    <div class="form-group">
+        <label>اسم العميل (إجباري):</label>
+        <input type="text" id="clientName">
+    </div>
+    <div class="form-group">
+        <label>رقم الهاتف (اختياري):</label>
+        <input type="text" id="phone">
+    </div>
+    <div class="form-group">
+        <label>المبلغ (إجباري):</label>
+        <input type="number" id="amount">
+    </div>
+    <div class="form-group">
+        <label>تفاصيل إضافية (اختياري):</label>
+        <textarea id="details" rows="3"></textarea>
+    </div>
+    <button onclick="addInvoice()">➕ إضافة الفاتورة</button>
+    <button onclick="downloadCSV()">💾 حفظ كملف CSV</button>
+</div>
+
+<hr>
+
+<input type="text" id="searchBar" placeholder="🔍 ابحث عن اسم العميل..." onkeyup="searchInvoice()">
+
+<table id="invoiceTable">
+    <thead>
+        <tr>
+            <th>اسم العميل</th>
+            <th>رقم الهاتف</th>
+            <th>المبلغ</th>
+            <th>تفاصيل</th>
+            <th>تاريخ الفاتورة</th>
+            <th>إجراءات</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+   <script>
+    // مصفوفة الفواتير
+    let invoices = [];
+
+    // مفتاح التخزين في المتصفح
+    const STORAGE_KEY = "abood_invoices";
+
+    // حفظ الفواتير في localStorage
+    function saveInvoices() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(invoices));
+    }
+
+    // تحميل الفواتير من localStorage
+    function loadInvoices() {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (data) {
+            try {
+                invoices = JSON.parse(data);
+            } catch (e) {
+                invoices = [];
+            }
+        }
+        renderTable();
+    }
+
+    // إضافة فاتورة جديدة
+    function addInvoice() {
+        const name = document.getElementById('clientName').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const amount = document.getElementById('amount').value.trim();
+        const details = document.getElementById('details').value.trim();
+        const today = new Date().toISOString().split('T')[0];
+
+        if (!name || !amount) {
+            alert("يرجى إدخال اسم العميل والمبلغ");
+            return;
+        }
+
+        invoices.push({name, phone, amount, details, date: today});
+        saveInvoices();
+        renderTable();
+
+        document.getElementById('clientName').value = '';
+        document.getElementById('phone').value = '';
+        document.getElementById('amount').value = '';
+        document.getElementById('details').value = '';
+    }
+
+    // رسم الجدول
+    function renderTable(filtered = invoices) {
+        const tbody = document.querySelector('#invoiceTable tbody');
+        tbody.innerHTML = '';
+        filtered.forEach((inv, index) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td><input type="text" value="${inv.name}" onchange="editInvoice(${index}, 'name', this.value)"></td>
+                    <td><input type="text" value="${inv.phone}" onchange="editInvoice(${index}, 'phone', this.value)"></td>
+                    <td><input type="number" value="${inv.amount}" onchange="editInvoice(${index}, 'amount', this.value)"></td>
+                    <td><textarea onchange="editInvoice(${index}, 'details', this.value)">${inv.details}</textarea></td>
+                    <td><input type="date" value="${inv.date}" onchange="editInvoice(${index}, 'date', this.value)"></td>
+                    <td><button onclick="deleteInvoice(${index})">🗑️ حذف</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    // تعديل فاتورة
+    function editInvoice(index, field, value) {
+        invoices[index][field] = value;
+        saveInvoices();
+    }
+
+    // حذف فاتورة
+    function deleteInvoice(index) {
+        invoices.splice(index, 1);
+        saveInvoices();
+        renderTable();
+    }
+
+    // تحميل كـ CSV
+    function downloadCSV() {
+        let csvContent = "data:text/csv;charset=utf-8,اسم العميل,رقم الهاتف,المبلغ,تفاصيل,تاريخ الفاتورة\n" +
+            invoices.map(e => `${e.name},${e.phone},${e.amount},"${e.details}",${e.date}`).join("\n");
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI(csvContent));
+        link.setAttribute("download", "invoices.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // البحث عن فاتورة بالاسم
+    function searchInvoice() {
+        const searchValue = document.getElementById('searchBar').value.toLowerCase();
+        const filtered = invoices.filter(inv => inv.name.toLowerCase().includes(searchValue));
+        renderTable(filtered);
+    }
+
+    // أول ما تفتح الصفحة: حمّل الفواتير من الذاكرة
+    loadInvoices();
+</script>
+
+
+
+</body>
+</html>
